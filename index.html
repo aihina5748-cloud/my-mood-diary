@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="하루의 감정과 짧은 기록을 남기고 흐름을 돌아보는 감정 일기 서비스"
+    />
+    <meta name="theme-color" content="#6f67d9" />
+    <title>마음결 | 나만의 감정 일기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Nunito:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" aria-label="마음결 감정 일기">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">MAEUMGYEOL</p>
+          <h1>오늘의 마음결</h1>
+        </div>
+        <div class="today-badge" id="todayBadge" aria-label="오늘 날짜"></div>
+      </header>
+
+      <section class="screen is-active" id="homeScreen" aria-labelledby="homeTab">
+        <div class="hero-copy">
+          <p id="greeting">오늘의 마음은 어떤 결인가요?</p>
+          <span>작은 감정도 가볍게 남겨보세요.</span>
+        </div>
+
+        <section class="card calendar-card" aria-labelledby="calendarTitle">
+          <div class="card-heading">
+            <div>
+              <p class="section-kicker">CALENDAR</p>
+              <h2 id="calendarTitle"></h2>
+            </div>
+            <div class="calendar-nav" aria-label="월 이동">
+              <button class="icon-button" id="prevMonth" type="button" aria-label="이전 달">‹</button>
+              <button class="icon-button" id="nextMonth" type="button" aria-label="다음 달">›</button>
+            </div>
+          </div>
+          <div class="weekdays" aria-hidden="true">
+            <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+          </div>
+          <div class="calendar-grid" id="calendarGrid" aria-label="감정 달력"></div>
+          <div class="calendar-legend">
+            <span><i class="legend-dot today"></i>오늘</span>
+            <span><i class="legend-ring"></i>선택</span>
+            <span><i class="legend-dot recorded"></i>기록 있음</span>
+          </div>
+        </section>
+
+        <section class="card entry-card" aria-labelledby="entryTitle">
+          <div class="entry-date" id="selectedDateLabel"></div>
+          <h2 id="entryTitle">오늘의 기분은 어때요?</h2>
+          <div class="mood-options" id="moodOptions" role="radiogroup" aria-label="감정 선택">
+            <button type="button" class="mood-button" data-mood="happy" role="radio" aria-checked="false">
+              <span class="mood-emoji">😊</span><span>행복</span>
+            </button>
+            <button type="button" class="mood-button" data-mood="calm" role="radio" aria-checked="false">
+              <span class="mood-emoji">🙂</span><span>평온</span>
+            </button>
+            <button type="button" class="mood-button" data-mood="sad" role="radio" aria-checked="false">
+              <span class="mood-emoji">😔</span><span>울적</span>
+            </button>
+            <button type="button" class="mood-button" data-mood="angry" role="radio" aria-checked="false">
+              <span class="mood-emoji">😤</span><span>답답</span>
+            </button>
+          </div>
+          <label class="diary-field">
+            <span>한 줄 기록</span>
+            <textarea
+              id="diaryInput"
+              maxlength="120"
+              placeholder="오늘 마음에 남은 장면을 적어보세요."
+              rows="3"
+            ></textarea>
+            <small><span id="charCount">0</span> / 120</small>
+          </label>
+          <div class="entry-actions">
+            <button class="text-button" id="clearEntry" type="button" hidden>기록 지우기</button>
+            <button class="primary-button" id="saveEntry" type="button" disabled>기록 저장</button>
+          </div>
+        </section>
+      </section>
+
+      <section class="screen" id="insightScreen" aria-labelledby="insightTab" hidden>
+        <section class="summary-card">
+          <p class="section-kicker">MY PATTERN</p>
+          <h2>나의 마음 리포트</h2>
+          <p id="summaryCopy">기록이 쌓이면 마음의 흐름을 보여드릴게요.</p>
+          <div class="summary-stats">
+            <div><strong id="totalCount">0</strong><span>총 기록</span></div>
+            <div><strong id="streakCount">0</strong><span>연속 기록</span></div>
+            <div><strong id="favoriteMood">—</strong><span>가장 잦은 감정</span></div>
+          </div>
+        </section>
+
+        <section class="card analysis-card" aria-labelledby="analysisTitle">
+          <div class="card-heading analysis-heading">
+            <div>
+              <p class="section-kicker">OVERVIEW</p>
+              <h2 id="analysisTitle">감정 분포</h2>
+            </div>
+            <div class="period-tabs" aria-label="분석 기간">
+              <button type="button" class="is-selected" data-days="7">7일</button>
+              <button type="button" data-days="30">30일</button>
+              <button type="button" data-days="all">전체</button>
+            </div>
+          </div>
+          <div class="mood-bars" id="moodBars"></div>
+        </section>
+
+        <section class="card records-card" aria-labelledby="recordsTitle">
+          <div class="records-heading">
+            <div>
+              <p class="section-kicker">MEMORIES</p>
+              <h2 id="recordsTitle">지난 마음</h2>
+            </div>
+            <select id="moodFilter" aria-label="감정별 기록 필터">
+              <option value="all">모든 감정</option>
+              <option value="happy">행복</option>
+              <option value="calm">평온</option>
+              <option value="sad">울적</option>
+              <option value="angry">답답</option>
+            </select>
+          </div>
+          <div class="record-list" id="recordList"></div>
+        </section>
+      </section>
+
+      <nav class="bottom-nav" aria-label="주요 메뉴">
+        <button class="nav-button is-active" id="homeTab" type="button" data-screen="home">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-8Z"/></svg>
+          <span>기록</span>
+        </button>
+        <button class="nav-button" id="insightTab" type="button" data-screen="insight">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10m7 10V4m7 16v-7"/></svg>
+          <span>리포트</span>
+        </button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="confirm-layer" id="confirmLayer" hidden>
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+          <div class="confirm-icon">↺</div>
+          <h2 id="confirmTitle">기록을 지울까요?</h2>
+          <p>선택한 날짜의 감정과 일기가 사라져요.</p>
+          <div>
+            <button type="button" class="secondary-button" id="cancelClear">취소</button>
+            <button type="button" class="danger-button" id="confirmClear">지우기</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
